@@ -1,0 +1,79 @@
+<resources>
+    <string name="app_name">SDA_PROJECT</string>
+
+
+    <!-- WELCOME fragment -->
+    <string name="WelcomeText1">5GOALS encourages you to set exactly five goals for each of your day.
+    aims to improve the efficiency of your day, to motivate you to consider what you want to achieve in short term, to decide what important is,
+        to understand how you succeed and to increase the commitment to achieve your short-term goals.</string>
+    <string name="WelcomeText2">5GOALS helps you to record these goals, to store them and to set and monitor their status.</string>
+    <string name="WelcomeText3">5GOALS gives feedback about your performance through various statistics and
+        introduces some playful inspiration through an achievement score system based on a pre-set formula. </string>
+
+    <string name="scoreText"></string>
+    <string name="todayText">You have not set any goal yet</string>
+
+    <!-- GOAL fragment -->
+    <string name="date">DATE</string>
+    <string name="goal">GOAL</string>
+    <string name="type">TYPE</string>
+    <string name="description">DESCRIPTION</string>
+    <string name="save">SAVE</string>
+
+    <string name="todayButton">TODAY</string>
+    <string name="saveButton">SAVE</string>
+    <string name="promptText">SELECT GOAL TYPE!</string>
+
+    <!-- DAY fragment -->
+    <string name="descriptionText">DESCRIPTION</string>
+    <string name="typeText">TYPE</string>
+    <string name="goalCounter">1.</string>
+
+    <string name="confirm_dialog_message">Please confirm if you want to delete this goal pernanently</string>
+    <string name="confirm_dialog_title">Confirmation</string>
+    <string name="confirm">Sure</string>
+    <string name="cancel">Chicken out</string>
+
+    <!-- STATISTICS fragment -->
+    <string name="textForHorizontalBarChart">The bar chart shows you the split between your complete and incomplete goals for the selected perdiod.
+        Attempt to complete as many goals as possbile.</string>
+    <string name="textForPieChart">The pie chart shows you the distribution of the type of the goals you set  for the selected perdiod.
+    Diversify your goals. Do not overuse or neglect any of the areas.</string>
+    <string name="textForLineChart">The line chart shows you the number of goals you set each day  for the selected perdiod.
+    Ideally you set 5 and complete them all.</string>
+
+    <string name="fortnightDate">FORTNIGHT</string>
+    <string name="customeDate">SET START DATE</string>
+
+    <!-- SCORE EXPLAINER class -->
+    <string name="scoreExplainer">HOW IS THE GOAL SCORE CALCULATED?</string>
+    <string name="textForIntro">The goal score is calculated based on three factors in the last fortnight, each contributing 1/3 to the final score.
+    The maximum score is 100.</string>
+    <string name="textForCompletion">1) The COMPLETION FACTOR is based on the ratio of your completed and set goals.
+        (100/3 * completed goals / all goals set)</string>
+    <string name="completionFactor">Your current completion factor is:</string>
+    <string name="textForGoalCount">2) The GOAL COUNT FACTOR compares the goals you set to the recommended daily five goals.
+    (100/3 * the goals you set / 70 recommended goals for fortnight)</string>
+    <string name="goalCountFactor">Your current goal count factor is:</string>
+    <string name="textForTypeDiversity">3) The TYPE DIVERSITY FACTOR compares the number of different goal types set
+        against the eight available types.</string>
+    <string name="typeDiversityFactor">Your current type diversity factor is:</string>
+    <string name="scoreSummary">They add up to your score:</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string-array name="goal_type_array">
+        <item>SELECT TYPE!</item>
+        <item>educational</item>
+        <item>health</item>
+        <item>relationship</item>
+        <item>personal development</item>
+        <item>career</item>
+        <item>financial</item>
+        <item>experiential</item>
+        <item>other</item>
+    </string-array>
+
+
+</resources>

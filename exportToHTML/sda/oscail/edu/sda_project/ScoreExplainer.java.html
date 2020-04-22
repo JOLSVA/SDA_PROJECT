@@ -1,0 +1,67 @@
+<html>
+<head>
+<title>ScoreExplainer.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #808080; font-style: italic;}
+.s3 { color: #008000; font-weight: bold;}
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+ScoreExplainer.java</font>
+</center></td></tr></table>
+<pre><a name="l1"><span class="ln">1    </span></a><span class="s0">package </span>sda.oscail.edu.sda_project;
+<a name="l2"><span class="ln">2    </span></a>
+<a name="l3"><span class="ln">3    </span></a><span class="s0">import </span>android.content.Intent;
+<a name="l4"><span class="ln">4    </span></a><span class="s0">import </span>android.os.Bundle;
+<a name="l5"><span class="ln">5    </span></a><span class="s0">import </span>android.widget.TextView;
+<a name="l6"><span class="ln">6    </span></a>
+<a name="l7"><span class="ln">7    </span></a><span class="s0">import </span>androidx.appcompat.app.AppCompatActivity;
+<a name="l8"><span class="ln">8    </span></a><span class="s0">import </span>androidx.appcompat.widget.Toolbar;
+<a name="l9"><span class="ln">9    </span></a>
+<a name="l10"><span class="ln">10   </span></a><span class="s0">import </span>java.util.Objects;
+<a name="l11"><span class="ln">11   </span></a>
+<a name="l12"><span class="ln">12   </span></a><span class="s0">public class </span>ScoreExplainer <span class="s0">extends </span>AppCompatActivity {
+<a name="l13"><span class="ln">13   </span></a>
+<a name="l14"><span class="ln">14   </span></a>    <span class="s0">private </span>TextView completionFactorText, goalCountFactorText, typeDiversityFactorText,
+<a name="l15"><span class="ln">15   </span></a>            perfomanceScoreText;
+<a name="l16"><span class="ln">16   </span></a>
+<a name="l17"><span class="ln">17   </span></a>    @Override
+<a name="l18"><span class="ln">18   </span></a>    <span class="s0">protected void </span>onCreate(Bundle savedInstanceState) {
+<a name="l19"><span class="ln">19   </span></a>        <span class="s0">super</span>.onCreate(savedInstanceState);
+<a name="l20"><span class="ln">20   </span></a>        setContentView(R.layout.score_explainer);
+<a name="l21"><span class="ln">21   </span></a>
+<a name="l22"><span class="ln">22   </span></a>        <span class="s2">//set the toolbar we have overridden</span>
+<a name="l23"><span class="ln">23   </span></a>        Toolbar toolbar = findViewById(R.id.toolbar);
+<a name="l24"><span class="ln">24   </span></a>        setSupportActionBar(toolbar);
+<a name="l25"><span class="ln">25   </span></a>
+<a name="l26"><span class="ln">26   </span></a>        <span class="s2">//adds a home button to the toolbar.</span>
+<a name="l27"><span class="ln">27   </span></a>        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(<span class="s0">true</span>);
+<a name="l28"><span class="ln">28   </span></a>        getSupportActionBar().setDisplayShowHomeEnabled(<span class="s0">true</span>);
+<a name="l29"><span class="ln">29   </span></a>
+<a name="l30"><span class="ln">30   </span></a>        <span class="s2">//to receive score details from the Welcome Fragment</span>
+<a name="l31"><span class="ln">31   </span></a>        <span class="s0">final </span>String completionFactor = Objects.requireNonNull(getIntent().getExtras().getString(<span class="s3">&quot;COMPLETION_FACTOR&quot;</span>));
+<a name="l32"><span class="ln">32   </span></a>        <span class="s0">final </span>String goalCountFactor = Objects.requireNonNull(getIntent().getExtras().getString(<span class="s3">&quot;GOAL_COUNT_FACTOR&quot;</span>));
+<a name="l33"><span class="ln">33   </span></a>        <span class="s0">final </span>String typeDiversityFactor = Objects.requireNonNull(getIntent().getExtras().getString(<span class="s3">&quot;TYPE_DIVERSITY_FACTOR&quot;</span>));
+<a name="l34"><span class="ln">34   </span></a>        <span class="s0">final </span>String performanceScore = Objects.requireNonNull(getIntent().getExtras().getString(<span class="s3">&quot;PERFORMANCE_SCORE&quot;</span>));
+<a name="l35"><span class="ln">35   </span></a>
+<a name="l36"><span class="ln">36   </span></a>        completionFactorText = findViewById(R.id.completionFactor);
+<a name="l37"><span class="ln">37   </span></a>        goalCountFactorText = findViewById(R.id.goalCountFactor);
+<a name="l38"><span class="ln">38   </span></a>        typeDiversityFactorText = findViewById(R.id.typeDiversityFactor);
+<a name="l39"><span class="ln">39   </span></a>        perfomanceScoreText = findViewById(R.id.scoreSummary);
+<a name="l40"><span class="ln">40   </span></a>
+<a name="l41"><span class="ln">41   </span></a>        completionFactorText.setText(<span class="s3">&quot;Your current completion factor is: &quot; </span>+ completionFactor);
+<a name="l42"><span class="ln">42   </span></a>        goalCountFactorText.setText(<span class="s3">&quot;Your current goal count factor is: &quot; </span>+ goalCountFactor);
+<a name="l43"><span class="ln">43   </span></a>        typeDiversityFactorText.setText(<span class="s3">&quot;Your current type diversity factor is:&quot; </span>+ typeDiversityFactor);
+<a name="l44"><span class="ln">44   </span></a>        perfomanceScoreText.setText(<span class="s3">&quot;YOUR PERFORMANCE SCORE IS: &quot; </span>+ <span class="s3">&quot;</span><span class="s0">\n</span><span class="s3">&quot; </span>+ performanceScore);
+<a name="l45"><span class="ln">45   </span></a>    }
+<a name="l46"><span class="ln">46   </span></a>}
+<a name="l47"><span class="ln">47   </span></a></pre>
+</body>
+</html>

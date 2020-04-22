@@ -1,0 +1,294 @@
+<html>
+<head>
+<title>DayViewAdapter.java</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #000080; font-weight: bold;}
+.s1 { color: #000000;}
+.s2 { color: #808080; font-style: italic;}
+.s3 { color: #008000; font-weight: bold;}
+.s4 { color: #0000ff;}
+.ln { color: #999999; font-weight: normal; font-style: normal; }
+</style>
+</head>
+<body bgcolor="#ffffff">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#c0c0c0" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+DayViewAdapter.java</font>
+</center></td></tr></table>
+<pre><a name="l1"><span class="ln">1    </span></a><span class="s0">package </span>sda.oscail.edu.sda_project;
+<a name="l2"><span class="ln">2    </span></a>
+<a name="l3"><span class="ln">3    </span></a><span class="s0">import </span>android.app.AlertDialog;
+<a name="l4"><span class="ln">4    </span></a><span class="s0">import </span>android.content.Context;
+<a name="l5"><span class="ln">5    </span></a><span class="s0">import </span>android.content.DialogInterface;
+<a name="l6"><span class="ln">6    </span></a><span class="s0">import </span>android.util.Log;
+<a name="l7"><span class="ln">7    </span></a><span class="s0">import </span>android.view.LayoutInflater;
+<a name="l8"><span class="ln">8    </span></a><span class="s0">import </span>android.view.View;
+<a name="l9"><span class="ln">9    </span></a><span class="s0">import </span>android.view.ViewGroup;
+<a name="l10"><span class="ln">10   </span></a><span class="s0">import </span>android.widget.Button;
+<a name="l11"><span class="ln">11   </span></a><span class="s0">import </span>android.widget.CompoundButton;
+<a name="l12"><span class="ln">12   </span></a><span class="s0">import </span>android.widget.ImageView;
+<a name="l13"><span class="ln">13   </span></a><span class="s0">import </span>android.widget.TextView;
+<a name="l14"><span class="ln">14   </span></a><span class="s0">import </span>android.widget.ToggleButton;
+<a name="l15"><span class="ln">15   </span></a>
+<a name="l16"><span class="ln">16   </span></a><span class="s0">import </span>androidx.annotation.NonNull;
+<a name="l17"><span class="ln">17   </span></a><span class="s0">import </span>androidx.constraintlayout.widget.ConstraintLayout;
+<a name="l18"><span class="ln">18   </span></a><span class="s0">import </span>androidx.recyclerview.widget.RecyclerView;
+<a name="l19"><span class="ln">19   </span></a>
+<a name="l20"><span class="ln">20   </span></a><span class="s0">import </span>com.bumptech.glide.Glide;
+<a name="l21"><span class="ln">21   </span></a><span class="s0">import </span>com.google.android.gms.tasks.OnFailureListener;
+<a name="l22"><span class="ln">22   </span></a><span class="s0">import </span>com.google.android.gms.tasks.OnSuccessListener;
+<a name="l23"><span class="ln">23   </span></a><span class="s0">import </span>com.google.firebase.firestore.FirebaseFirestore;
+<a name="l24"><span class="ln">24   </span></a><span class="s0">import </span>com.google.firebase.firestore.SetOptions;
+<a name="l25"><span class="ln">25   </span></a>
+<a name="l26"><span class="ln">26   </span></a><span class="s0">import </span>java.util.ArrayList;
+<a name="l27"><span class="ln">27   </span></a><span class="s0">import </span>java.util.HashMap;
+<a name="l28"><span class="ln">28   </span></a><span class="s0">import </span>java.util.Map;
+<a name="l29"><span class="ln">29   </span></a>
+<a name="l30"><span class="ln">30   </span></a><span class="s0">public class </span>DayViewAdapter <span class="s0">extends </span>RecyclerView.Adapter&lt;DayViewAdapter.ViewHolder&gt; {
+<a name="l31"><span class="ln">31   </span></a>
+<a name="l32"><span class="ln">32   </span></a>    <span class="s0">private </span>Context mNewContext;
+<a name="l33"><span class="ln">33   </span></a>
+<a name="l34"><span class="ln">34   </span></a>    <span class="s2">//add array for each item</span>
+<a name="l35"><span class="ln">35   </span></a>    <span class="s0">final </span>ArrayList&lt;String&gt; goalDataset;
+<a name="l36"><span class="ln">36   </span></a>    <span class="s0">final </span>ArrayList&lt;String&gt; typeDataset;
+<a name="l37"><span class="ln">37   </span></a>    <span class="s0">final </span>ArrayList&lt;String&gt; descriptionDataset;
+<a name="l38"><span class="ln">38   </span></a>    <span class="s0">final </span>ArrayList&lt;String&gt; docReferenceDataset;
+<a name="l39"><span class="ln">39   </span></a>    <span class="s0">final </span>ArrayList&lt;String&gt; completionDataset;
+<a name="l40"><span class="ln">40   </span></a>    <span class="s0">final </span>ArrayList&lt;String&gt; dateDataset;
+<a name="l41"><span class="ln">41   </span></a>
+<a name="l42"><span class="ln">42   </span></a>    <span class="s2">//adding URI to Firebase Storage for the images to be displayed</span>
+<a name="l43"><span class="ln">43   </span></a>    String completionImageUri = <span class="s3">&quot;https://firebasestorage.googleapis.com/v0/b/sda-project-goal.appspot.com/o/blue_complete_task.jpg?alt=media&amp;token=92a04940-4a02-4957-80c3-4b46b54172d0&quot;</span>;
+<a name="l44"><span class="ln">44   </span></a>    String educationalUri = <span class="s3">&quot;https://firebasestorage.googleapis.com/v0/b/sda-project-goal.appspot.com/o/educational.png?alt=media&amp;token=72844dbe-9669-4728-b73f-856dfcff74ea&quot;</span>;
+<a name="l45"><span class="ln">45   </span></a>    String healthUri = <span class="s3">&quot;https://firebasestorage.googleapis.com/v0/b/sda-project-goal.appspot.com/o/health.jpg?alt=media&amp;token=76c7b62e-6795-4525-b099-834c9c42293b&quot;</span>;
+<a name="l46"><span class="ln">46   </span></a>    String relationshipUri = <span class="s3">&quot;https://firebasestorage.googleapis.com/v0/b/sda-project-goal.appspot.com/o/relationship2.jpg?alt=media&amp;token=4654024a-9670-4d47-a509-dda4b5a8f484&quot;</span>;
+<a name="l47"><span class="ln">47   </span></a>    String personalDevelopmentUri = <span class="s3">&quot;https://firebasestorage.googleapis.com/v0/b/sda-project-goal.appspot.com/o/personal%20development.jpg?alt=media&amp;token=aaf977dd-16f0-4735-9944-4a287f2bfc02&quot;</span>;
+<a name="l48"><span class="ln">48   </span></a>    String careerUri = <span class="s3">&quot;https://firebasestorage.googleapis.com/v0/b/sda-project-goal.appspot.com/o/career.png?alt=media&amp;token=642b8db6-ff59-4575-9245-13ca66e6f19d&quot;</span>;
+<a name="l49"><span class="ln">49   </span></a>    String financialUri = <span class="s3">&quot;https://firebasestorage.googleapis.com/v0/b/sda-project-goal.appspot.com/o/financial.png?alt=media&amp;token=3c413527-6c59-44aa-93f9-069ca3824d96&quot;</span>;
+<a name="l50"><span class="ln">50   </span></a>    String experientialUri = <span class="s3">&quot;https://firebasestorage.googleapis.com/v0/b/sda-project-goal.appspot.com/o/educational.png?alt=media&amp;token=72844dbe-9669-4728-b73f-856dfcff74ea&quot;</span>;
+<a name="l51"><span class="ln">51   </span></a>    String otherUri = <span class="s3">&quot;https://firebasestorage.googleapis.com/v0/b/sda-project-goal.appspot.com/o/other.png?alt=media&amp;token=32a9ec04-249b-496e-abd0-1731622de38b&quot;</span>;
+<a name="l52"><span class="ln">52   </span></a>
+<a name="l53"><span class="ln">53   </span></a>    <span class="s0">private static final </span>String TAG = <span class="s3">&quot;Recycler View Adapter&quot;</span>;
+<a name="l54"><span class="ln">54   </span></a>
+<a name="l55"><span class="ln">55   </span></a>    DayViewAdapter(Context mNewContext, ArrayList&lt;String&gt; docReferenceDataset, ArrayList&lt;String&gt; goalDataset, ArrayList&lt;String&gt; typeDataset,ArrayList&lt;String&gt; descriptionDataset, ArrayList&lt;String&gt; completionDataset, ArrayList&lt;String&gt; dateDataset) {
+<a name="l56"><span class="ln">56   </span></a>
+<a name="l57"><span class="ln">57   </span></a>        <span class="s0">this</span>.mNewContext = mNewContext;
+<a name="l58"><span class="ln">58   </span></a>
+<a name="l59"><span class="ln">59   </span></a>        <span class="s0">this</span>.goalDataset = goalDataset;
+<a name="l60"><span class="ln">60   </span></a>        <span class="s0">this</span>.typeDataset = typeDataset;
+<a name="l61"><span class="ln">61   </span></a>        <span class="s0">this</span>.descriptionDataset = descriptionDataset;
+<a name="l62"><span class="ln">62   </span></a>        <span class="s0">this</span>.docReferenceDataset = docReferenceDataset;
+<a name="l63"><span class="ln">63   </span></a>        <span class="s0">this</span>.completionDataset = completionDataset;
+<a name="l64"><span class="ln">64   </span></a>        <span class="s0">this</span>.dateDataset = dateDataset;
+<a name="l65"><span class="ln">65   </span></a>
+<a name="l66"><span class="ln">66   </span></a>    }
+<a name="l67"><span class="ln">67   </span></a>
+<a name="l68"><span class="ln">68   </span></a>    @NonNull
+<a name="l69"><span class="ln">69   </span></a>    @Override
+<a name="l70"><span class="ln">70   </span></a>    <span class="s0">public </span>ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, <span class="s0">int </span>i) {
+<a name="l71"><span class="ln">71   </span></a>        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.recycler_list_item, viewGroup, <span class="s0">false</span>);
+<a name="l72"><span class="ln">72   </span></a>        <span class="s0">return new </span>ViewHolder(view);
+<a name="l73"><span class="ln">73   </span></a>    }
+<a name="l74"><span class="ln">74   </span></a>
+<a name="l75"><span class="ln">75   </span></a>    @Override
+<a name="l76"><span class="ln">76   </span></a>    <span class="s0">public void </span>onBindViewHolder(@NonNull <span class="s0">final </span>ViewHolder viewHolder, <span class="s0">final int </span>position) {
+<a name="l77"><span class="ln">77   </span></a>
+<a name="l78"><span class="ln">78   </span></a>        Log.d(TAG, <span class="s3">&quot;onBindViewHolder: was called&quot;</span>);
+<a name="l79"><span class="ln">79   </span></a>
+<a name="l80"><span class="ln">80   </span></a>
+<a name="l81"><span class="ln">81   </span></a>        <span class="s0">int </span>counter = position+<span class="s4">1</span>;
+<a name="l82"><span class="ln">82   </span></a>        String counterText = Integer.toString(counter);
+<a name="l83"><span class="ln">83   </span></a>
+<a name="l84"><span class="ln">84   </span></a>        <span class="s2">//assigned the query values to the recyclerview</span>
+<a name="l85"><span class="ln">85   </span></a>        viewHolder.goalText.setText(goalDataset.get(position));
+<a name="l86"><span class="ln">86   </span></a>        viewHolder.typeText.setText(typeDataset.get(position));
+<a name="l87"><span class="ln">87   </span></a>        viewHolder.descriptionText.setText(descriptionDataset.get(position));
+<a name="l88"><span class="ln">88   </span></a>        viewHolder.goalCounter.setText(counterText);
+<a name="l89"><span class="ln">89   </span></a>
+<a name="l90"><span class="ln">90   </span></a>        <span class="s2">//display the type descriptive images</span>
+<a name="l91"><span class="ln">91   </span></a>        <span class="s0">try </span>{
+<a name="l92"><span class="ln">92   </span></a>            <span class="s0">switch </span>(typeDataset.get(position).toString()) {
+<a name="l93"><span class="ln">93   </span></a>                <span class="s0">case </span><span class="s3">&quot;educational&quot; </span>: Glide.with(viewHolder.typeImage.getContext()).load(educationalUri).into(viewHolder.typeImage);<span class="s0">break</span>;
+<a name="l94"><span class="ln">94   </span></a>                <span class="s0">case </span><span class="s3">&quot;health&quot; </span>: Glide.with(viewHolder.typeImage.getContext()).load(healthUri).into(viewHolder.typeImage);<span class="s0">break</span>;
+<a name="l95"><span class="ln">95   </span></a>                <span class="s0">case </span><span class="s3">&quot;relationship&quot; </span>: Glide.with(viewHolder.typeImage.getContext()).load(relationshipUri).into(viewHolder.typeImage);<span class="s0">break</span>;
+<a name="l96"><span class="ln">96   </span></a>                <span class="s0">case </span><span class="s3">&quot;personal development&quot; </span>: Glide.with(viewHolder.typeImage.getContext()).load(personalDevelopmentUri).into(viewHolder.typeImage);<span class="s0">break</span>;
+<a name="l97"><span class="ln">97   </span></a>                <span class="s0">case </span><span class="s3">&quot;career&quot; </span>: Glide.with(viewHolder.typeImage.getContext()).load(careerUri).into(viewHolder.typeImage);<span class="s0">break</span>;
+<a name="l98"><span class="ln">98   </span></a>                <span class="s0">case </span><span class="s3">&quot;financial&quot; </span>: Glide.with(viewHolder.typeImage.getContext()).load(financialUri).into(viewHolder.typeImage);<span class="s0">break</span>;
+<a name="l99"><span class="ln">99   </span></a>                <span class="s0">case </span><span class="s3">&quot;experiential&quot; </span>: Glide.with(viewHolder.typeImage.getContext()).load(experientialUri).into(viewHolder.typeImage);<span class="s0">break</span>;
+<a name="l100"><span class="ln">100  </span></a>                <span class="s0">case </span><span class="s3">&quot;other&quot; </span>: Glide.with(viewHolder.typeImage.getContext()).load(otherUri).into(viewHolder.typeImage);<span class="s0">break</span>;
+<a name="l101"><span class="ln">101  </span></a>            }
+<a name="l102"><span class="ln">102  </span></a>        }
+<a name="l103"><span class="ln">103  </span></a>        <span class="s0">catch </span>(Exception e) {
+<a name="l104"><span class="ln">104  </span></a>            e.printStackTrace();
+<a name="l105"><span class="ln">105  </span></a>        }
+<a name="l106"><span class="ln">106  </span></a>
+<a name="l107"><span class="ln">107  </span></a>        <span class="s2">//add completion check</span>
+<a name="l108"><span class="ln">108  </span></a>        <span class="s0">boolean </span>checkCompletionStatus = completionDataset.get(position).equals(<span class="s3">&quot;complete&quot;</span>);
+<a name="l109"><span class="ln">109  </span></a>        <span class="s0">if </span>(checkCompletionStatus) {
+<a name="l110"><span class="ln">110  </span></a>            <span class="s0">try </span>{
+<a name="l111"><span class="ln">111  </span></a>                Glide.with(viewHolder.completionImage.getContext()).load(completionImageUri).into(viewHolder.completionImage);
+<a name="l112"><span class="ln">112  </span></a>            }
+<a name="l113"><span class="ln">113  </span></a>            <span class="s0">catch </span>(Exception e) {
+<a name="l114"><span class="ln">114  </span></a>                e.printStackTrace();
+<a name="l115"><span class="ln">115  </span></a>            }
+<a name="l116"><span class="ln">116  </span></a>            viewHolder.completeToggleButton.setChecked(<span class="s0">false</span>);
+<a name="l117"><span class="ln">117  </span></a>        }
+<a name="l118"><span class="ln">118  </span></a>        <span class="s0">else </span>{
+<a name="l119"><span class="ln">119  </span></a>            viewHolder.completeToggleButton.setChecked(<span class="s0">true</span>);
+<a name="l120"><span class="ln">120  </span></a>        }
+<a name="l121"><span class="ln">121  </span></a>
+<a name="l122"><span class="ln">122  </span></a>        <span class="s0">final </span>FirebaseFirestore db = FirebaseFirestore.getInstance();
+<a name="l123"><span class="ln">123  </span></a>
+<a name="l124"><span class="ln">124  </span></a>        <span class="s2">//listener on the remove button to delete a document at the give recyclerview position</span>
+<a name="l125"><span class="ln">125  </span></a>        viewHolder.removeButton.setOnClickListener(<span class="s0">new </span>View.OnClickListener() {
+<a name="l126"><span class="ln">126  </span></a>            @Override
+<a name="l127"><span class="ln">127  </span></a>            <span class="s0">public void </span>onClick(View v) {
+<a name="l128"><span class="ln">128  </span></a>
+<a name="l129"><span class="ln">129  </span></a>                <span class="s2">//Alert Dialog to ask for confirmation before a document is deleted</span>
+<a name="l130"><span class="ln">130  </span></a>                AlertDialog alertDialog = <span class="s0">new </span>AlertDialog.Builder(mNewContext).create();
+<a name="l131"><span class="ln">131  </span></a>                alertDialog.setTitle(<span class="s3">&quot;Confirmation request&quot;</span>);
+<a name="l132"><span class="ln">132  </span></a>                alertDialog.setMessage(<span class="s3">&quot;Please confirm if you want to delete this goal record permanently.&quot;</span>);
+<a name="l133"><span class="ln">133  </span></a>
+<a name="l134"><span class="ln">134  </span></a>                <span class="s2">//delete after confirmation</span>
+<a name="l135"><span class="ln">135  </span></a>                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE,<span class="s3">&quot;Sure&quot;</span>, <span class="s0">new </span>DialogInterface.OnClickListener() {
+<a name="l136"><span class="ln">136  </span></a>                            <span class="s0">public void </span>onClick(DialogInterface dialog, <span class="s0">int </span>id) {
+<a name="l137"><span class="ln">137  </span></a>
+<a name="l138"><span class="ln">138  </span></a>                    <span class="s2">// Remove a new document with a generated ID</span>
+<a name="l139"><span class="ln">139  </span></a>                    db.collection(<span class="s3">&quot;users&quot;</span>).document(docReferenceDataset.get(position))
+<a name="l140"><span class="ln">140  </span></a>                        .delete()
+<a name="l141"><span class="ln">141  </span></a>                        .addOnSuccessListener(<span class="s0">new </span>OnSuccessListener&lt;Void&gt;() {
+<a name="l142"><span class="ln">142  </span></a>                            @Override
+<a name="l143"><span class="ln">143  </span></a>                                <span class="s0">public void </span>onSuccess(Void aVoid) {
+<a name="l144"><span class="ln">144  </span></a>                                    Log.d(TAG, <span class="s3">&quot;Document updated successfully&quot;</span>);
+<a name="l145"><span class="ln">145  </span></a>
+<a name="l146"><span class="ln">146  </span></a>                                    <span class="s2">//remove the relevant goal from the arraylists and update the recyclerview</span>
+<a name="l147"><span class="ln">147  </span></a>                                    goalDataset.remove(position);
+<a name="l148"><span class="ln">148  </span></a>                                    typeDataset.remove(position);
+<a name="l149"><span class="ln">149  </span></a>                                    descriptionDataset.remove(position);
+<a name="l150"><span class="ln">150  </span></a>                                    docReferenceDataset.remove(position);
+<a name="l151"><span class="ln">151  </span></a>                                    completionDataset.remove(position);
+<a name="l152"><span class="ln">152  </span></a>                                    dateDataset.remove(position);
+<a name="l153"><span class="ln">153  </span></a>                                    notifyDataSetChanged();
+<a name="l154"><span class="ln">154  </span></a>
+<a name="l155"><span class="ln">155  </span></a>                                }
+<a name="l156"><span class="ln">156  </span></a>
+<a name="l157"><span class="ln">157  </span></a>                        })
+<a name="l158"><span class="ln">158  </span></a>                        .addOnFailureListener(<span class="s0">new </span>OnFailureListener() {
+<a name="l159"><span class="ln">159  </span></a>                            @Override
+<a name="l160"><span class="ln">160  </span></a>                            <span class="s0">public void </span>onFailure(@NonNull Exception e) {
+<a name="l161"><span class="ln">161  </span></a>                            Log.w(TAG, <span class="s3">&quot;Error adding document&quot;</span>, e);
+<a name="l162"><span class="ln">162  </span></a>                            }
+<a name="l163"><span class="ln">163  </span></a>                        });
+<a name="l164"><span class="ln">164  </span></a>                            }
+<a name="l165"><span class="ln">165  </span></a>
+<a name="l166"><span class="ln">166  </span></a>                });
+<a name="l167"><span class="ln">167  </span></a>
+<a name="l168"><span class="ln">168  </span></a>                <span class="s2">//dismiss the deletion after rejection</span>
+<a name="l169"><span class="ln">169  </span></a>                alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE,<span class="s3">&quot;Not really&quot;</span>, <span class="s0">new </span>DialogInterface.OnClickListener() {
+<a name="l170"><span class="ln">170  </span></a>                        <span class="s0">public void </span>onClick(DialogInterface dialog, <span class="s0">int </span>id) {
+<a name="l171"><span class="ln">171  </span></a>                            dialog.dismiss();
+<a name="l172"><span class="ln">172  </span></a>                        }
+<a name="l173"><span class="ln">173  </span></a>                });
+<a name="l174"><span class="ln">174  </span></a>                alertDialog.show();
+<a name="l175"><span class="ln">175  </span></a>            }
+<a name="l176"><span class="ln">176  </span></a>        });
+<a name="l177"><span class="ln">177  </span></a>
+<a name="l178"><span class="ln">178  </span></a>        <span class="s2">//listener on the complete button to delete a document at the give recyclerview position</span>
+<a name="l179"><span class="ln">179  </span></a>        viewHolder.completeToggleButton.setOnCheckedChangeListener(<span class="s0">new </span>CompoundButton.OnCheckedChangeListener() {
+<a name="l180"><span class="ln">180  </span></a>            @Override
+<a name="l181"><span class="ln">181  </span></a>            <span class="s0">public void </span>onCheckedChanged(CompoundButton buttonView, <span class="s0">boolean </span>isChecked) {
+<a name="l182"><span class="ln">182  </span></a>
+<a name="l183"><span class="ln">183  </span></a>                <span class="s0">if </span>(isChecked){
+<a name="l184"><span class="ln">184  </span></a>
+<a name="l185"><span class="ln">185  </span></a>                    <span class="s2">// update the satus of the user collection document in Cloud Firestore</span>
+<a name="l186"><span class="ln">186  </span></a>                    Map&lt;String, Object&gt; user = <span class="s0">new </span>HashMap&lt;&gt;();
+<a name="l187"><span class="ln">187  </span></a>                    user.put(<span class="s3">&quot;status&quot;</span>, <span class="s3">&quot;incomplete&quot;</span>);
+<a name="l188"><span class="ln">188  </span></a>
+<a name="l189"><span class="ln">189  </span></a>                    <span class="s2">// update the database for status only for the determined document</span>
+<a name="l190"><span class="ln">190  </span></a>                    db.collection(<span class="s3">&quot;users&quot;</span>).document(docReferenceDataset.get(position))
+<a name="l191"><span class="ln">191  </span></a>                            .set(user, SetOptions.merge())
+<a name="l192"><span class="ln">192  </span></a>                            .addOnSuccessListener(<span class="s0">new </span>OnSuccessListener&lt;Void&gt;() {
+<a name="l193"><span class="ln">193  </span></a>                                @Override
+<a name="l194"><span class="ln">194  </span></a>                                <span class="s0">public void </span>onSuccess(Void aVoid) {
+<a name="l195"><span class="ln">195  </span></a>                                    Log.d(TAG, <span class="s3">&quot;Document updated successfully&quot;</span>);
+<a name="l196"><span class="ln">196  </span></a>                                    <span class="s2">//Toast.makeText(getApplicationContext(), &quot;Goal saved successfully!&quot;, Toast.LENGTH_LONG).show();</span>
+<a name="l197"><span class="ln">197  </span></a>                                    //completionText.setText(&quot;incomplete&quot;);
+<a name="l198"><span class="ln">198  </span></a>                                    viewHolder.completionImage.setImageResource(<span class="s4">0</span>);
+<a name="l199"><span class="ln">199  </span></a>                                }
+<a name="l200"><span class="ln">200  </span></a>                            })
+<a name="l201"><span class="ln">201  </span></a>                            .addOnFailureListener(<span class="s0">new </span>OnFailureListener() {
+<a name="l202"><span class="ln">202  </span></a>                                @Override
+<a name="l203"><span class="ln">203  </span></a>                                <span class="s0">public void </span>onFailure(@NonNull Exception e) {
+<a name="l204"><span class="ln">204  </span></a>                                    Log.w(TAG, <span class="s3">&quot;Error adding document&quot;</span>, e);
+<a name="l205"><span class="ln">205  </span></a>                                }
+<a name="l206"><span class="ln">206  </span></a>                            });
+<a name="l207"><span class="ln">207  </span></a>
+<a name="l208"><span class="ln">208  </span></a>                }
+<a name="l209"><span class="ln">209  </span></a>
+<a name="l210"><span class="ln">210  </span></a>                <span class="s0">else </span>{
+<a name="l211"><span class="ln">211  </span></a>
+<a name="l212"><span class="ln">212  </span></a>                    <span class="s2">// update the satus of the user collection document in Cloud Firestore</span>
+<a name="l213"><span class="ln">213  </span></a>                    Map&lt;String, Object&gt; user = <span class="s0">new </span>HashMap&lt;&gt;();
+<a name="l214"><span class="ln">214  </span></a>                    user.put(<span class="s3">&quot;status&quot;</span>, <span class="s3">&quot;complete&quot;</span>);
+<a name="l215"><span class="ln">215  </span></a>
+<a name="l216"><span class="ln">216  </span></a>                    <span class="s2">// update the database for status only for the determined document</span>
+<a name="l217"><span class="ln">217  </span></a>                    db.collection(<span class="s3">&quot;users&quot;</span>).document(docReferenceDataset.get(position))
+<a name="l218"><span class="ln">218  </span></a>                            .set(user, SetOptions.merge())
+<a name="l219"><span class="ln">219  </span></a>                            .addOnSuccessListener(<span class="s0">new </span>OnSuccessListener&lt;Void&gt;() {
+<a name="l220"><span class="ln">220  </span></a>                                @Override
+<a name="l221"><span class="ln">221  </span></a>                                <span class="s0">public void </span>onSuccess(Void aVoid) {
+<a name="l222"><span class="ln">222  </span></a>                                    Log.d(TAG, <span class="s3">&quot;Document updated successfully&quot;</span>);
+<a name="l223"><span class="ln">223  </span></a>                                    <span class="s2">//Toast.makeText(getApplicationContext(), &quot;Goal saved successfully!&quot;, Toast.LENGTH_LONG).show();</span>
+<a name="l224"><span class="ln">224  </span></a>                                    <span class="s0">try </span>{
+<a name="l225"><span class="ln">225  </span></a>                                        Glide.with(viewHolder.completionImage.getContext()).load(completionImageUri).into(viewHolder.completionImage);
+<a name="l226"><span class="ln">226  </span></a>                                    } <span class="s0">catch </span>(Exception e) {
+<a name="l227"><span class="ln">227  </span></a>                                        e.printStackTrace();
+<a name="l228"><span class="ln">228  </span></a>                                    }
+<a name="l229"><span class="ln">229  </span></a>                                }
+<a name="l230"><span class="ln">230  </span></a>                            })
+<a name="l231"><span class="ln">231  </span></a>                            .addOnFailureListener(<span class="s0">new </span>OnFailureListener() {
+<a name="l232"><span class="ln">232  </span></a>                                @Override
+<a name="l233"><span class="ln">233  </span></a>                                <span class="s0">public void </span>onFailure(@NonNull Exception e) {
+<a name="l234"><span class="ln">234  </span></a>                                    Log.w(TAG, <span class="s3">&quot;Error adding document&quot;</span>, e);
+<a name="l235"><span class="ln">235  </span></a>                                }
+<a name="l236"><span class="ln">236  </span></a>                            });
+<a name="l237"><span class="ln">237  </span></a>                }
+<a name="l238"><span class="ln">238  </span></a>            }
+<a name="l239"><span class="ln">239  </span></a>        });
+<a name="l240"><span class="ln">240  </span></a>
+<a name="l241"><span class="ln">241  </span></a>    }
+<a name="l242"><span class="ln">242  </span></a>    @Override
+<a name="l243"><span class="ln">243  </span></a>    <span class="s0">public int </span>getItemCount() {
+<a name="l244"><span class="ln">244  </span></a>        <span class="s0">return </span>goalDataset.size();
+<a name="l245"><span class="ln">245  </span></a>    }
+<a name="l246"><span class="ln">246  </span></a>
+<a name="l247"><span class="ln">247  </span></a>    <span class="s2">//view holder class for recycler_list_item.xml</span>
+<a name="l248"><span class="ln">248  </span></a>    <span class="s0">class </span>ViewHolder <span class="s0">extends </span>RecyclerView.ViewHolder{
+<a name="l249"><span class="ln">249  </span></a>
+<a name="l250"><span class="ln">250  </span></a>        <span class="s2">//ImageView imageItem;</span>
+<a name="l251"><span class="ln">251  </span></a>        TextView goalText, typeText, descriptionText, goalCounter;
+<a name="l252"><span class="ln">252  </span></a>        Button removeButton;
+<a name="l253"><span class="ln">253  </span></a>        ToggleButton completeToggleButton;
+<a name="l254"><span class="ln">254  </span></a>        ConstraintLayout itemParentLayout;
+<a name="l255"><span class="ln">255  </span></a>        ImageView completionImage, typeImage;
+<a name="l256"><span class="ln">256  </span></a>
+<a name="l257"><span class="ln">257  </span></a>        ViewHolder(@NonNull View itemView) {
+<a name="l258"><span class="ln">258  </span></a>            <span class="s0">super</span>(itemView);
+<a name="l259"><span class="ln">259  </span></a>
+<a name="l260"><span class="ln">260  </span></a>            <span class="s2">//grab the image, the text and the layout id's</span>
+<a name="l261"><span class="ln">261  </span></a>            goalText = itemView.findViewById(R.id.goal_recycler);
+<a name="l262"><span class="ln">262  </span></a>            typeText = itemView.findViewById(R.id.type_recycler);
+<a name="l263"><span class="ln">263  </span></a>            descriptionText = itemView.findViewById(R.id.description_recycler);
+<a name="l264"><span class="ln">264  </span></a>            goalCounter = itemView.findViewById(R.id.goalCounter);
+<a name="l265"><span class="ln">265  </span></a>            completionImage = itemView.findViewById(R.id.completionImageView);
+<a name="l266"><span class="ln">266  </span></a>            typeImage = itemView.findViewById(R.id.typeImageView);
+<a name="l267"><span class="ln">267  </span></a>
+<a name="l268"><span class="ln">268  </span></a>            removeButton = itemView.findViewById(R.id.button_recycler);
+<a name="l269"><span class="ln">269  </span></a>            completeToggleButton = itemView.findViewById(R.id.toggleButton_recycler);
+<a name="l270"><span class="ln">270  </span></a>            itemParentLayout = itemView.findViewById(R.id.listItemLayout);
+<a name="l271"><span class="ln">271  </span></a>        }
+<a name="l272"><span class="ln">272  </span></a>    }
+<a name="l273"><span class="ln">273  </span></a>}</pre>
+</body>
+</html>

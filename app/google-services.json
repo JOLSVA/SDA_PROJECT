@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "237893116179",
+    "firebase_url": "https://sda-project-goal.firebaseio.com",
+    "project_id": "sda-project-goal",
+    "storage_bucket": "sda-project-goal.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:237893116179:android:90afb80eeadd7b393a7ae6",
+        "android_client_info": {
+          "package_name": "sda.oscail.edu.sda_project"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "237893116179-6u7ngv67qpslimtho12tmoq00ikea4ea.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sda.oscail.edu.sda_project",
+            "certificate_hash": "6e0508b1e2e8552bab89d534929934808520b525"
+          }
+        },
+        {
+          "client_id": "237893116179-j5igvc515brg2cb1rajcsb59g4s6v55f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQPXQxZeLGSVrzn8c98btXSCSnrq_jDbg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "237893116179-j5igvc515brg2cb1rajcsb59g4s6v55f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
